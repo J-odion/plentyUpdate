@@ -1,7 +1,7 @@
+import * as React from 'react';
 import {Text, View} from 'react-native';
-import React, {Component} from 'react';
 
-export default function SettingsScreen() {
+export default function SettingsScreen({navigation}) {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text>Settings Screen</Text>
