@@ -13,6 +13,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator
+        initialRouteName="Home"
         // screenOptions={{headerShown: false}}
         screenOptions={({route}) => ({
           // headerShown: false,
