@@ -1,51 +1,152 @@
 import React from 'react';
-import {Button, Modal, Center, NativeBaseProvider} from 'native-base';
-import {useState} from 'react';
+import {
+  Input,
+  IconButton,
+  Checkbox,
+  Text,
+  Box,
+  VStack,
+  HStack,
+  Heading,
+  Icon,
+  Center,
+  useToast,
+  NativeBaseProvider,
+} from 'native-base';
+import {Feather, Entypo} from 'react-native-vector-icons';
 
 const Example = () => {
-  const [showModal, setShowModal] = useState(false);
+  const instState = [
+    {
+      title: 'Code',
+      isCompleted: true,
+    },
+    {
+      title: 'Meeting with team at 9',
+      isCompleted: false,
+    },
+    {
+      title: 'Check Emails',
+      isCompleted: false,
+    },
+    {
+      title: 'Write an article',
+      isCompleted: false,
+    },
+    {
+      title: 'Write a blog post',
+      isCompleted: false,
+    },
+  ];
+  const [list, setList] = React.useState(instState);
+  const [inputValue, setInputValue] = React.useState('');
+  const toast = useToast();
+
+  const addItem = title => {
+    if (title === '') {
+      toast.show({
+        title: 'Please Enter Text',
+        status: 'warning',
+      });
+      return;
+    }
+
+    setList(prevList => {
+      return [
+        ...prevList,
+        {
+          title: title,
+          isCompleted: false,
+        },
+      ];
+    });
+  };
+
+  const handleDelete = index => {
+    setList(prevList => {
+      const temp = prevList.filter((_, itemI) => itemI !== index);
+      return temp;
+    });
+  };
+
+  const handleStatusChange = index => {
+    setList(prevList => {
+      const newList = [...prevList];
+      newList[index].isCompleted = !newList[index].isCompleted;
+      return newList;
+    });
+  };
+
   return (
-    <Center>
-      <Button onPress={() => setShowModal(true)}>Button</Button>
-      <Modal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        _backdrop={{
-          _dark: {
-            bg: 'coolGray.800',
-          },
-          bg: 'warmGray.50',
-        }}>
-        <Modal.Content maxWidth="350" maxH="412">
-          <Modal.CloseButton />
-          <Modal.Header>Return Policy</Modal.Header>
-          <Modal.Body>
-            Create a 'Return Request' under “My Orders” section of App/Website.
-            Follow the screens that come up after tapping on the 'Return’
-            button. Please make a note of the Return ID that we generate at the
-            end of the process. Keep the item ready for pick up or ship it to us
-            basis on the return mode.
-          </Modal.Body>
-          <Modal.Footer>
-            <Button.Group space={2}>
-              <Button
-                variant="ghost"
-                colorScheme="blueGray"
-                onPress={() => {
-                  setShowModal(false);
-                }}>
-                Cancel
-              </Button>
-              <Button
-                onPress={() => {
-                  setShowModal(false);
-                }}>
-                Save
-              </Button>
-            </Button.Group>
-          </Modal.Footer>
-        </Modal.Content>
-      </Modal>
+    <Center w="100%">
+      <Box maxW="300" w="100%">
+        <Heading mb="2" size="md">
+          Wednesday
+        </Heading>
+        <VStack space={4}>
+          <HStack space={2}>
+            <Input
+              flex={1}
+              onChangeText={v => setInputValue(v)}
+              value={inputValue}
+              placeholder="Add Task"
+            />
+            <IconButton
+              borderRadius="sm"
+              variant="solid"
+              icon={
+                <Icon as={Feather} name="plus" size="sm" color="warmGray.50" />
+              }
+              onPress={() => {
+                addItem(inputValue);
+                setInputValue('');
+              }}
+            />
+          </HStack>
+          <VStack space={2}>
+            {list.map((item, itemI) => (
+              <HStack
+                w="100%"
+                justifyContent="space-between"
+                alignItems="center"
+                key={item.title + itemI.toString()}>
+                <Checkbox
+                  isChecked={item.isCompleted}
+                  onChange={() => handleStatusChange(itemI)}
+                  value={item.title}></Checkbox>
+                <Text
+                  width="100%"
+                  flexShrink={1}
+                  textAlign="left"
+                  mx="2"
+                  strikeThrough={item.isCompleted}
+                  _light={{
+                    color: item.isCompleted ? 'gray.400' : 'coolGray.800',
+                  }}
+                  _dark={{
+                    color: item.isCompleted ? 'gray.400' : 'coolGray.50',
+                  }}
+                  onPress={() => handleStatusChange(itemI)}>
+                  {item.title}
+                </Text>
+                <IconButton
+                  size="sm"
+                  colorScheme="trueGray"
+                  icon={
+                    <Icon
+                      as={Entypo}
+                      name="minus"
+                      size="xs"
+                      color="trueGray.400"
+                    />
+                  }
+                  onPress={() => handleDelete(itemI)}
+                />
+              </HStack>
+            ))}
+          </VStack>
+        </VStack>
+      </Box>
     </Center>
   );
 };
