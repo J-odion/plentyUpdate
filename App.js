@@ -17,6 +17,7 @@ export default function App() {
         // screenOptions={{headerShown: false}}
         screenOptions={({route}) => ({
           // headerShown: false,
+
           tabBarIcon: ({focused, color, size}) => {
             let iconName;
 
@@ -39,7 +40,7 @@ export default function App() {
           },
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'gray',
-          tabBarShowLabel: false,
+          // tabBarShowLabel: false,
           tabBarStyle: {
             position: 'absolute',
             marginVertical: 10,
@@ -54,10 +55,34 @@ export default function App() {
             },
           },
         })}>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Details" component={DetailsScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-        <Tab.Screen name="History" component={HistoryScreen} />
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            tabBarLabel: 'Home',
+          }}
+        />
+        <Tab.Screen
+          name="Details"
+          component={DetailsScreen}
+          options={{
+            tabBarLabel: 'Details',
+          }}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            tabBarLabel: 'Settings',
+          }}
+        />
+        <Tab.Screen
+          name="History"
+          component={HistoryScreen}
+          options={{
+            tabBarLabel: 'History',
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
